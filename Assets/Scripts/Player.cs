@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Plyaer : MonoBehaviour
 {
     public Vector2 inputVec;
     public float speed;
-
+    
     Rigidbody2D rigid;
     SpriteRenderer spriter;
     Animator anim;
@@ -14,6 +15,7 @@ public class Plyaer : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()
