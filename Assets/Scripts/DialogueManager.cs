@@ -19,14 +19,11 @@ public class DialogueManager : MonoBehaviour
         {
             typingCoroutine = StartCoroutine(TypeLine());
         }
-        else
-        {
-            Debug.LogWarning("dialogueLines가 비어 있음!");
-        }
     }
 
     IEnumerator TypeLine()
     {
+        Debug.Log("타이핑 시작");
         Text.text = "";
         foreach (char c in dialogueLines[currentLine])
         {
@@ -34,6 +31,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(typingSpeed);
         }
     }
+
 
     public void NextLine()
     {
@@ -44,10 +42,6 @@ public class DialogueManager : MonoBehaviour
         {
             currentLine++;
             typingCoroutine = StartCoroutine(TypeLine());
-        }
-        else
-        {
-            Debug.Log("대화 끝!");
         }
     }
 }
