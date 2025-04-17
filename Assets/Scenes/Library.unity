@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -230,8 +230,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: 500, y: 50}
+  m_AnchoredPosition: {x: 80, y: 0}
+  m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &395266071
 MonoBehaviour:
@@ -253,18 +253,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD14C\uC2A4\uD2B8 \uC911\uC785\uB2C8\uB2E4 \uC5EC\uB7EC\uAC00\uC9C0 \uB9D0\uC744
-    \uD558\uACE0 \uC788\uC5B4\uC694 \n"
+  m_text: '
+
+'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 45f51bf14114d644096d389a2f9a5b05, type: 2}
-  m_sharedMaterial: {fileID: 3026335463056336896, guid: 45f51bf14114d644096d389a2f9a5b05, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5da62e470c5ae2045a8607270426fe19, type: 2}
+  m_sharedMaterial: {fileID: 5246868647433839752, guid: 5da62e470c5ae2045a8607270426fe19, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4289895348
+  m_fontColor: {r: 0.7058824, g: 0.60784316, b: 0.69803923, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -599,10 +600,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d06d7dda5663bc14ea0be264548f42b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textPanel: {fileID: 131303821}
   Name: {fileID: 1099291145}
   Text: {fileID: 395266071}
-  dialogueLines: []
-  typingSpeed: 0.07
+  dialogueLines:
+  - "\uC73C\uC74C... \uC5C6\uC5B4 \uC5B4\uB51C \uCC3E\uC544\uBD10\uB3C4 \uC5EC\uAE30
+    \uCC45\uC774 \uC5C6\uC5B4..."
+  - "\uC5B4\uB514 \uAC04\uAC70\uC9C0..."
+  - "\uADF8\uB7EC\uACE0\uBCF4\uB2C8 \uB9AC\uB4DC\uD55C\uD14C \uBE4C\uB824\uC92C\uB358\uAC00..?"
+  typingSpeed: 0.05
 --- !u!4 &800948375
 Transform:
   m_ObjectHideFlags: 0
@@ -1026,7 +1032,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: 40}
+  m_AnchoredPosition: {x: 20, y: -50}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1099291145
@@ -1058,8 +1064,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4289895348
+  m_fontColor: {r: 0.7058824, g: 0.60784316, b: 0.69803923, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1076,8 +1082,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -24,8 +24,7 @@ public class CameraConnectManager : MonoBehaviour
     IEnumerator ConnectCameraAfterSceneLoads()
     {
         yield return null;
-
-        Debug.Log("씬 전환");
+        
 
         var cam = Camera.main;
         if (cam == null)
@@ -37,12 +36,10 @@ public class CameraConnectManager : MonoBehaviour
         var controller = cam.GetComponent<CameraFollowing>();
         if (controller == null)
         {
-            Debug.LogError("스크립트가 카메라에 없음!");
             yield break;
         }
 
         controller.target = transform;
-        Debug.Log("카메라가 Player를 따라가도록 설정완료");
     }
 
 }
