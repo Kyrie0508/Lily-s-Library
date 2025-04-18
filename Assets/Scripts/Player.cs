@@ -20,6 +20,9 @@ public class Plyaer : MonoBehaviour
 
     void Update()
     {
+        if (FadeInController.isFading || FadeOutController.isFading)
+            return;
+                
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
     }

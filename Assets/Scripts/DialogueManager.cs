@@ -5,7 +5,8 @@ using System.Collections;
 
 public class DialogueManager : MonoBehaviour
 {
-    public GameObject textPanel;                // ← TextPanel 전체를 숨기기 위해 필요
+    public GameObject textPanel;    
+    public GameObject characterImage;
     public TextMeshProUGUI Name;
     public TextMeshProUGUI Text;
     public string[] dialogueLines;
@@ -23,6 +24,9 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
+        if (FadeInController.isFading)
+            return;
+        
         // Z 키 또는 마우스 클릭 시 동작
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetMouseButtonDown(0))
         {
@@ -76,7 +80,8 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            textPanel.SetActive(false); // 대사 끝 → 패널 숨김
+            textPanel.SetActive(false); 
+            characterImage.SetActive(false);
         }
     }
 }

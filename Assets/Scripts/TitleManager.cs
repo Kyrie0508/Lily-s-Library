@@ -5,7 +5,7 @@ public class TitleManager : MonoBehaviour
 {
     public void OnClickStart()
     {
-        SceneManager.LoadScene("Library"); // 게임 첫 씬 이름
+        FindAnyObjectByType<FadeOutController>().StartFadeOut("Library");
     }
 
     public void OnClickSettings()
