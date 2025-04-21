@@ -8,6 +8,6 @@ public class SceneChanger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        SceneManager.LoadScene("Lounge");
+        FindAnyObjectByType<FadeOutController>().StartFadeOut("Lounge");
     }
 }
