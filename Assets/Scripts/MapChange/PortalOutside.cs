@@ -8,7 +8,7 @@ public class PortalOutside : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("추후 구현 예정");
-        //FindAnyObjectByType<FadeOutController>().StartFadeOut("다음 맵");
+        
+        FindAnyObjectByType<FadeOutController>().StartFadeOut("WorldMap");
     }
 }

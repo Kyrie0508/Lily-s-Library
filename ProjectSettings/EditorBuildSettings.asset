@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lounge.unity
     guid: 0bc67e01feac7c44f80751aeec3cad5e
+  - enabled: 1
+    path: Assets/Scenes/WorldMap.unity
+    guid: fd6ce6248034e6b45b7f2f666715bf40
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
