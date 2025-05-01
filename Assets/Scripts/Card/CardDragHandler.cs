@@ -3,35 +3,66 @@ using UnityEngine.EventSystems;
 
 public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Transform originalParent;
-    private Canvas canvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+    private Vector3 originalPosition;
+    private BattleManager battleManager;
+    private Card cardData;
 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
 
-        // 최상위 Canvas 찾기
-        canvas = GetComponentInParent<Canvas>();
+        cardData = GetComponent<Card>();
+        battleManager = FindAnyObjectByType<BattleManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        originalParent = transform.parent;
-        transform.SetParent(canvas.transform, true); // 드래그 시 최상단으로 이동
-        canvasGroup.blocksRaycasts = false; // 드래그 중에는 Raycast 막기 끔
+        originalPosition = rectTransform.anchoredPosition;
+        canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        rectTransform.anchoredPosition += eventData.delta / GetCanvasScaleFactor();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.SetParent(originalParent, true); // 원래 부모로 복귀
         canvasGroup.blocksRaycasts = true;
+
+        if (IsOnValidField(eventData))
+        {
+            Debug.Log($"{cardData.cardType} 카드 사용 예약!");
+
+            if (battleManager != null && cardData != null)
+            {
+                battleManager.RegisterUsedCard(cardData.gameObject);
+            }
+
+            // 이제 드래그 종료해도 Destroy 안 함!
+            // 그냥 필드에 남아있게 한다
+        }
+        else
+        {
+            rectTransform.anchoredPosition = originalPosition;
+        }
+    }
+
+    private bool IsOnValidField(PointerEventData eventData)
+    {
+        return true;
+    }
+
+    private float GetCanvasScaleFactor()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        return canvas != null ? canvas.scaleFactor : 1f;
     }
 }

@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class BattleManager : MonoBehaviour
 {
     [Header("카드 관련")]
-    public GameObject cardPrefab; // 생성할 카드 프리팹
-    public Transform playerHandArea; // 손패가 놓이는 곳
-    public Transform fieldArea; // 카드가 사용될 필드
+    public GameObject cardPrefab;
+    public Transform playerHandArea;
+    public Transform fieldArea;
 
     [Header("턴 관련")]
     public Button endTurnButton;
@@ -15,11 +15,11 @@ public class BattleManager : MonoBehaviour
     public int drawPerTurn = 1;
 
     [Header("스킬 컷씬 관련")]
-    public SkillCutinManager skillCutinManager; // 스킬 컷씬 매니저 연결
+    public SkillCutinManager skillCutinManager;
 
     private List<GameObject> playerHand = new List<GameObject>();
-    private List<Card> usedCardsThisTurn = new List<Card>();
-
+    private List<GameObject> usedCards = new List<GameObject>(); // 드랍된 카드 저장
+    private int swordPowerSum = 0;
     private int turnCount = 1;
 
     void Start()
@@ -52,32 +52,51 @@ public class BattleManager : MonoBehaviour
 
         if (card != null)
         {
-            // 랜덤 타입 지정
             card.cardType = (CardType)Random.Range(0, System.Enum.GetValues(typeof(CardType)).Length);
-            // 랜덤 파워 지정 (1~3)
             card.power = Random.Range(1, 4);
-
-            // 카드 위에 표시하고 싶으면 Text 설정 가능
-            // 예) cardObj.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = $"{card.cardType} {card.power}";
         }
 
         playerHand.Add(cardObj);
     }
 
+    public void RegisterUsedCard(GameObject cardObj)
+    {
+        if (!usedCards.Contains(cardObj))
+        {
+            usedCards.Add(cardObj);
+        }
+    }
+
     public void EndTurn()
     {
-        Debug.Log("턴 종료: " + turnCount);
+        Debug.Log($"턴 종료: {turnCount}");
+
+        swordPowerSum = 0;
+
+        foreach (GameObject cardObj in usedCards)
+        {
+            Card card = cardObj.GetComponent<Card>();
+            if (card != null && card.cardType == CardType.Sword)
+            {
+                swordPowerSum += card.power;
+            }
+        }
+
+        Debug.Log($"이번 턴 누적 칼 수치: {swordPowerSum}");
 
         CheckSkillActivation();
 
+        // 사용한 카드 삭제
+        foreach (GameObject cardObj in usedCards)
+        {
+            Destroy(cardObj);
+        }
+        usedCards.Clear();
+
         // 다음 턴 시작
         turnCount++;
-        Debug.Log("턴 시작: " + turnCount);
+        Debug.Log($"턴 시작: {turnCount}");
 
-        // 턴이 끝나면 사용한 카드 초기화
-        usedCardsThisTurn.Clear();
-
-        // 카드 드로우
         for (int i = 0; i < drawPerTurn; i++)
         {
             DrawCard();
@@ -86,21 +105,9 @@ public class BattleManager : MonoBehaviour
 
     void CheckSkillActivation()
     {
-        int swordPower = 0;
-
-        foreach (Card card in usedCardsThisTurn)
+        if (swordPowerSum >= 5)
         {
-            if (card.cardType == CardType.Sword)
-            {
-                swordPower += card.power;
-            }
-        }
-
-        if (swordPower >= 5)
-        {
-            Debug.Log($"스킬 발동! (칼 수치 합계: {swordPower})");
-
-            // 스킬 컷씬 연출
+            Debug.Log("스킬 발동!");
             if (skillCutinManager != null)
             {
                 skillCutinManager.ShowSkillCutin();
@@ -108,12 +115,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"스킬 조건 미달 (칼 수치 합계: {swordPower})");
+            Debug.Log("스킬 발동 실패");
         }
-    }
-
-    public void RegisterUsedCard(Card card)
-    {
-        usedCardsThisTurn.Add(card);
     }
 }

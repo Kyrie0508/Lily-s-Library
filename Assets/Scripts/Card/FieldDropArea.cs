@@ -19,7 +19,7 @@ public class FieldDropArea : MonoBehaviour, IDropHandler
             Card card = droppedCard.GetComponent<Card>();
             if (card != null)
             {
-                battleManager.RegisterUsedCard(card);
+                battleManager.RegisterUsedCard(droppedCard);
             }
         }
     }
