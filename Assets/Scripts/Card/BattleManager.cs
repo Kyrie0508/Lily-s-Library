@@ -1,64 +1,61 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
-    [Header("카드 관련")]
-    public GameObject cardPrefab;
+    [Header("카드 프리팹 (Sword, Book, Shield, Star 순서)")]
+    public GameObject swordPrefab;
+    public GameObject bookPrefab;
+    public GameObject shieldPrefab;
+    public GameObject starPrefab;
+
+    [Header("카드 배치 영역")]
     public Transform playerHandArea;
-    public Transform fieldArea;
+    public Transform enemyHandArea;
 
-    [Header("턴 관련")]
-    public Button endTurnButton;
-    public int maxHandSize = 5;
-    public int drawPerTurn = 1;
-
-    [Header("스킬 컷씬 관련")]
-    public SkillCutinManager skillCutinManager;
-
-    private List<GameObject> playerHand = new List<GameObject>();
-    private List<GameObject> usedCards = new List<GameObject>(); // 드랍된 카드 저장
-    private int swordPowerSum = 0;
-    private int turnCount = 1;
+    private List<DeckCardData> deck = new List<DeckCardData>();
+    private List<GameObject> usedCards = new();
+    public Transform playerFieldTransform;
+    private int currentDrawIndex = 0;
+    private bool isPlayerTurn = true;
 
     void Start()
     {
-        SetupBattle();
+        Debug.Log("BattleManager Start 호출됨");
+        GenerateDeck();
+        DealInitialHands();
     }
 
-    void SetupBattle()
+    void GenerateDeck()
     {
-        Debug.Log("배틀 시작");
-
-        endTurnButton.onClick.AddListener(EndTurn);
-
-        for (int i = 0; i < maxHandSize; i++)
+        deck.Clear();
+        foreach (CardType type in System.Enum.GetValues(typeof(CardType)))
         {
-            DrawCard();
+            for (int i = 0; i < 15; i++)
+            {
+                deck.Add(new DeckCardData
+                {
+                    cardType = type,
+                    power = Random.Range(1, 7) // 1~6 랜덤 수치
+                });
+            }
+        }
+
+        // 셔플
+        for (int i = 0; i < deck.Count; i++)
+        {
+            int rand = Random.Range(i, deck.Count);
+            (deck[i], deck[rand]) = (deck[rand], deck[i]);
         }
     }
 
-    public void DrawCard()
+    void DealInitialHands()
     {
-        if (playerHand.Count >= maxHandSize)
+        for (int i = 0; i < 10; i++) // 플레이어 5장, 적 5장
         {
-            Debug.Log("손패가 가득 찼습니다!");
-            return;
+            DrawNextCard();
         }
-
-        GameObject cardObj = Instantiate(cardPrefab, playerHandArea);
-        Card card = cardObj.GetComponent<Card>();
-
-        if (card != null)
-        {
-            card.cardType = (CardType)Random.Range(0, System.Enum.GetValues(typeof(CardType)).Length);
-            card.power = Random.Range(1, 4);
-        }
-
-        playerHand.Add(cardObj);
     }
-
     public void RegisterUsedCard(GameObject cardObj)
     {
         if (!usedCards.Contains(cardObj))
@@ -66,56 +63,45 @@ public class BattleManager : MonoBehaviour
             usedCards.Add(cardObj);
         }
     }
-
-    public void EndTurn()
+    
+    public bool IsPlayerCard(Card card)
     {
-        Debug.Log($"턴 종료: {turnCount}");
-
-        swordPowerSum = 0;
-
-        foreach (GameObject cardObj in usedCards)
-        {
-            Card card = cardObj.GetComponent<Card>();
-            if (card != null && card.cardType == CardType.Sword)
-            {
-                swordPowerSum += card.power;
-            }
-        }
-
-        Debug.Log($"이번 턴 누적 칼 수치: {swordPowerSum}");
-
-        CheckSkillActivation();
-
-        // 사용한 카드 삭제
-        foreach (GameObject cardObj in usedCards)
-        {
-            Destroy(cardObj);
-        }
-        usedCards.Clear();
-
-        // 다음 턴 시작
-        turnCount++;
-        Debug.Log($"턴 시작: {turnCount}");
-
-        for (int i = 0; i < drawPerTurn; i++)
-        {
-            DrawCard();
-        }
+        return card.transform.parent == playerHandArea;
     }
 
-    void CheckSkillActivation()
+
+    public void DrawNextCard()
     {
-        if (swordPowerSum >= 5)
-        {
-            Debug.Log("스킬 발동!");
-            if (skillCutinManager != null)
-            {
-                skillCutinManager.ShowSkillCutin();
-            }
-        }
-        else
-        {
-            Debug.Log("스킬 발동 실패");
-        }
+        if (currentDrawIndex >= deck.Count) return;
+
+        DeckCardData data = deck[currentDrawIndex++];
+        GameObject prefab = GetPrefabByType(data.cardType);
+        Transform parent = isPlayerTurn ? playerHandArea : enemyHandArea;
+
+        GameObject cardObj = Instantiate(prefab, parent);
+        Card card = cardObj.GetComponent<Card>();
+        card.cardType = data.cardType;
+        card.power = data.power;
+        card.UpdateUI();
+        Debug.Log($"드로우: {data.cardType} {data.power}");
+        isPlayerTurn = !isPlayerTurn;
     }
+
+    GameObject GetPrefabByType(CardType type)
+    {
+        return type switch
+        {
+            CardType.Sword => swordPrefab,
+            CardType.Book => bookPrefab,
+            CardType.Shield => shieldPrefab,
+            CardType.Star => starPrefab,
+            _ => swordPrefab
+        };
+    }
+}
+
+public class DeckCardData
+{
+    public CardType cardType;
+    public int power;
 }
