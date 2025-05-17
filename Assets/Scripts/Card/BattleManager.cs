@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -15,6 +16,9 @@ public class BattleManager : MonoBehaviour
 
     [Header("손패 슬롯 6개")]
     public Transform[] handSlots = new Transform[6];
+    
+    [SerializeField] private Transform enemyFieldTransform;
+    [SerializeField] private List<Card> enemyCards = new List<Card>();
 
     private bool[] handOccupied = new bool[6];
     private List<Card> handCards = new();
@@ -22,6 +26,8 @@ public class BattleManager : MonoBehaviour
     private List<DeckCardData> deck = new();
     private int currentDrawIndex = 0;
     private bool isPlayerTurn = true;
+    private bool isTurnProcessing = false;
+
 
     void Start()
     {
@@ -174,17 +180,77 @@ public class BattleManager : MonoBehaviour
         }
     }
     
+    public void DrawUntilHandFull()
+    {
+        while (handCards.Count < 6 && currentDrawIndex < deck.Count)
+        {
+            DrawNextCard();
+        }
+    }
+
+    
     public void OnOKButtonClick()
     {
-        Debug.Log("OK 버튼 클릭됨 - 필드 카드 분석 시작");
+        if (!isPlayerTurn || isTurnProcessing) return;
 
-        // 카드 타입별 합계 저장
-        int swordSum = 0;
-        int bookSum = 0;
-        int shieldSum = 0;
-        int starSum = 0;
+        isTurnProcessing = true;
+        isPlayerTurn = false;
 
-        foreach (Card card in fieldCards)
+        Debug.Log("OK 버튼 클릭 - 플레이어 턴 종료, 적 턴 시작");
+
+        // 카드 분석, 컷씬, 카드 삭제는 모두 적 턴 종료 시점에서 수행
+        StartCoroutine(StartEnemyTurn());
+    }
+    
+    private IEnumerator StartEnemyTurn()
+    {
+        Debug.Log("적의 턴 시작");
+
+        yield return new WaitForSeconds(1f);
+
+        // 🔹 적 카드 생성
+        int enemyCardCount = Random.Range(1, 3);
+        enemyCards.Clear();
+
+        for (int i = 0; i < enemyCardCount; i++)
+        {
+            CardType type = (CardType)Random.Range(0, 4);
+            int power = Random.Range(1, 6);
+
+            GameObject prefab = GetPrefabByType(type);
+            GameObject go = Instantiate(prefab, enemyFieldTransform);
+            Card card = go.GetComponent<Card>();
+
+            card.SetData(type, power);
+            card.SetInteractable(false);
+
+            // 위치 정렬 (좌우 배치)
+            float spacing = 140f;
+            float startX = -(enemyCardCount - 1) * spacing / 2f;
+            card.transform.localPosition = new Vector3(startX + i * spacing, 80f, 0f);
+
+            enemyCards.Add(card);
+
+            yield return new WaitForSeconds(0.4f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        // 🔹 카드 수치 계산 (플레이어 + 적)
+        int swordSum = 0, bookSum = 0, shieldSum = 0, starSum = 0;
+
+        foreach (var card in fieldCards)
+        {
+            switch (card.cardType)
+            {
+                case CardType.Sword: swordSum += card.power; break;
+                case CardType.Book: bookSum += card.power; break;
+                case CardType.Shield: shieldSum += card.power; break;
+                case CardType.Star: starSum += card.power; break;
+            }
+        }
+
+        foreach (var card in enemyCards)
         {
             switch (card.cardType)
             {
@@ -197,27 +263,41 @@ public class BattleManager : MonoBehaviour
 
         Debug.Log($"Sword: {swordSum}, Book: {bookSum}, Shield: {shieldSum}, Star: {starSum}");
 
-        // 예시 스킬 조건: Sword 합이 5 이상이면 컷씬
+        // 🔹 컷씬 출력 조건
         if (swordSum >= 5)
         {
             Debug.Log("스킬 조건 충족: Sword ≥ 5");
             FindAnyObjectByType<SkillCutinManager>()?.ShowSkillCutin();
+            yield return new WaitForSeconds(1.2f); // 컷씬 연출 여유
         }
         else
         {
             Debug.Log("스킬 조건 미충족");
+            yield return new WaitForSeconds(0.5f);
         }
 
-        // (선택) 턴 전환 로직 들어갈 자리
-        // StartNextTurn();
-        
-        // 필드 비우기
-        foreach (Card card in fieldCards)
-        {
+        // 🔹 카드 삭제
+        foreach (var card in fieldCards)
             Destroy(card.gameObject);
-        }
+        foreach (var card in enemyCards)
+            Destroy(card.gameObject);
+
         fieldCards.Clear();
+        enemyCards.Clear();
+
+        yield return new WaitForSeconds(0.2f);
+
+        // 🔹 턴 전환
+        isPlayerTurn = true;
+        isTurnProcessing = false;
+
+        Debug.Log("플레이어 턴 시작");
+
+        DrawUntilHandFull(); // 손패가 6장이 되도록 자동 보충
     }
+
+    
+    public bool IsPlayerTurn() => isPlayerTurn;
 
 
 }
@@ -227,3 +307,4 @@ public class DeckCardData
     public CardType cardType;
     public int power;
 }
+

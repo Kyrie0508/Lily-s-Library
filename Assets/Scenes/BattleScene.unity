@@ -696,6 +696,8 @@ MonoBehaviour:
   - {fileID: 2142500004}
   - {fileID: 1192043029}
   - {fileID: 402504863}
+  enemyFieldTransform: {fileID: 258911709}
+  enemyCards: []
 --- !u!1 &562057551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,11 +1438,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 625853498}
-  - {fileID: 258911709}
   - {fileID: 1431126766}
   - {fileID: 999328136}
   - {fileID: 1321973483}
   - {fileID: 923946532}
+  - {fileID: 258911709}
   - {fileID: 1366543544}
   - {fileID: 384703089}
   m_Father: {fileID: 0}
