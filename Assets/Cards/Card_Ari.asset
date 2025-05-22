@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
+  m_Name: Card_Ari
+  m_EditorClassIdentifier: 
+  cardName: "\uC544\uB9AC"
+  fullImage: {fileID: 1370624195929071563, guid: 8522cb22e92d7134b84f35d4aa5635bc, type: 3}
+  cost: 1
+  attack: 1
+  hp: 1

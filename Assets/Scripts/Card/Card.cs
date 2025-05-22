@@ -1,53 +1,37 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
-
-public enum CardLocation { Hand, Field }
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerClickHandler
 {
-    private bool interactable = true;
-    public CardType cardType;
-    public int power;
+    public UnitCardSO cardData;
 
-    public TextMeshProUGUI powerText;
-    public int handIndex = -1;
-    public CardLocation currentLocation = CardLocation.Hand;
-    
-    public void SetData(CardType type, int power)
+    public TMP_Text costText;
+    public TMP_Text nameText;
+    public TMP_Text atkText;
+    public TMP_Text hpText;
+    public Image backgroundImage;
+
+    public void Init(UnitCardSO data)
     {
-        this.cardType = type;
-        this.power = power;
-        UpdateUI();
+        cardData = data;
+        costText.text = data.cost.ToString();
+        nameText.text = data.cardName;
+        atkText.text = data.attack.ToString();
+        hpText.text = data.hp.ToString();
+        backgroundImage.sprite = data.fullImage;
     }
 
-
-    public void UpdateUI()
-    {
-        if (powerText != null)
-            powerText.text = power.ToString();
-    }
-    
-    public void SetInteractable(bool canClick)
-    {
-        this.interactable = canClick;
-    }
-
+    public bool isPlaced = false;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        BattleManager bm = FindAnyObjectByType<BattleManager>();
-        if (bm == null) return;
-
-        if (!interactable || bm == null || !bm.IsPlayerTurn()) return;  // 턴이 아닐 때는 무시
-
-        if (currentLocation == CardLocation.Hand)
+        if (!isPlaced)
         {
-            bm.MoveCardToField(this);
-        }
-        else if (currentLocation == CardLocation.Field)
-        {
-            bm.ReturnCardToHand(this);
+            if (BattleManager.Instance.IsHandFull()) return;
+
+            BattleManager.Instance.MoveCardToField(this);
         }
     }
 }
