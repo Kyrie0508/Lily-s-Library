@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
   m_Name: Card_Ripple
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\uB07C\uC695\uC774"
   fullImage: {fileID: -1693485935312475804, guid: 27203bed75fe48b42b4e88d662292814, type: 3}
   cost: 3
   attack: 2

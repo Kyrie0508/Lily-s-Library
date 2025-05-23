@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ffaa2974c8d712d45a8e253389bffc3e
+guid: df6433cbe486b5a49919dfa72af345a2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2690934701578441244
-    second: PlayerSlotUI_0
+      213: -2577583830043293576
+    second: BattleField_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerSlotUI_0
+      name: BattleField_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4ed25a66521e7aad0800000000000000
-      internalID: -2690934701578441244
+      spriteID: 8788a77c9259a3cd0800000000000000
+      internalID: -2577583830043293576
       vertices: []
       indices: 
       edges: []

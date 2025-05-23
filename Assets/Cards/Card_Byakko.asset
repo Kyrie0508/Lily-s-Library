@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
   m_Name: Card_Byakko
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\uBC31\uD638"
   fullImage: {fileID: 1652336918095121786, guid: 2f057550cfcc11f4c8c7cd12de640ca4, type: 3}
   cost: 2
   attack: 2

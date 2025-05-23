@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
   m_Name: Card_SwiftPaw
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\uBBF8\uCFE0"
   fullImage: {fileID: -1952821782197164158, guid: d41979639ee08cd478268fe026180316, type: 3}
   cost: 2
   attack: 3

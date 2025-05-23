@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
   m_Name: Card_Gloop
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\uBB3C\uC758 \uC815\uB839"
   fullImage: {fileID: 6731061402739266554, guid: 859a8e3de78df6b45983204d80ec4c9d, type: 3}
   cost: 1
   attack: 1

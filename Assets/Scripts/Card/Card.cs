@@ -1,37 +1,71 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
+public enum CardEffectTrigger
+{
+    None,
+    OnSummon,
+    OnBattleStart,
+    OnTurnEnd,
+    OnAttack,
+    Delayed
+}
+
+public enum CardEffectType
+{
+    None,
+    BuffRandomAlly,
+    GainGold,
+    HealPlayer,
+    DuplicateSelf,
+    BuffAllAllies,
+    DamageRandomEnemy,
+    DamageAllEnemies,
+    DestroyRandomEnemy,
+    WeakenAllEnemies,
+    HealSelf,
+    AttackSplashDamage,
+    DelayedGoldGain
+}
 
 public class Card : MonoBehaviour, IPointerClickHandler
 {
-    public UnitCardSO cardData;
+    public string cardName;
+    public int cost;
+    public int attack;
+    public int hp;
 
-    public TMP_Text costText;
-    public TMP_Text nameText;
-    public TMP_Text atkText;
-    public TMP_Text hpText;
-    public Image backgroundImage;
-
-    public void Init(UnitCardSO data)
-    {
-        cardData = data;
-        costText.text = data.cost.ToString();
-        nameText.text = data.cardName;
-        atkText.text = data.attack.ToString();
-        hpText.text = data.hp.ToString();
-        backgroundImage.sprite = data.fullImage;
-    }
+    public CardEffectTrigger effectTrigger;
+    public CardEffectType effectType;
+    public int effectValue;
 
     public bool isPlaced = false;
+    public bool isEventCard = false;
+    public EventCardData eventCardData; 
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!isPlaced)
+        if (!isPlaced && BattleManager.Instance.IsPlayerTurn() && !BattleManager.Instance.IsFieldFull())
         {
-            if (BattleManager.Instance.IsHandFull()) return;
-
             BattleManager.Instance.MoveCardToField(this);
+        }
+        
+        if (isEventCard && BattleManager.Instance.IsPlayerTurn())
+        {
+            BattleManager.Instance.ApplyEventCardEffect(eventCardData);
+            BattleManager.Instance.playerHandCards.Remove(this);
+            Destroy(gameObject);
+        }
+
+    }
+
+    public void TriggerOnAttack()
+    {
+        if (effectTrigger != CardEffectTrigger.OnAttack) return;
+
+        if (effectType == CardEffectType.AttackSplashDamage)
+        {
+            BattleManager.Instance.ApplySplashDamage(this, effectValue);
         }
     }
 }

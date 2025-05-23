@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
   m_Name: Card_Sera
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\uC19C\uC774"
   fullImage: {fileID: -8742671328173201951, guid: cb3c7007c8c605a4797cae84225af085, type: 3}
   cost: 4
   attack: 3

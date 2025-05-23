@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d631bb4bb8fb1e4e85167bbcd9ec254, type: 3}
   m_Name: Card_Rose
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\uC18C\uD53C\uB098"
   fullImage: {fileID: 5614637178320563061, guid: a4dff43d73cc4b448ab9fda07739dae0, type: 3}
   cost: 5
   attack: 4
