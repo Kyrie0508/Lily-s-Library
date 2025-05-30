@@ -21,10 +21,10 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private Transform[] shopSlots; // 상점 슬롯 5개
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private List<ShopCardStock> allCardStocks;
-    [SerializeField] private List<UnitCardSO> allCards;
+    [SerializeField] public List<UnitCardSO> allCards;
 
 
-    private Dictionary<int, float[]> tierChances = new()
+    public Dictionary<int, float[]> tierChances = new()
     {
         { 1, new float[] { 1f, 0f, 0f, 0f, 0f } },
         { 2, new float[] { 1f, 0f, 0f, 0f, 0f } },
@@ -114,5 +114,18 @@ public class ShopManager : MonoBehaviour
 
         return result;
     }
+    
+    public void ReturnCardToStock(UnitCardSO card)
+    {
+        foreach (ShopCardStock stock in allCardStocks)
+        {
+            if (stock.card == card)
+            {
+                stock.remaining++;
+                break;
+            }
+        }
+    }
+
 
 }

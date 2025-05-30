@@ -14,12 +14,22 @@ public class BattleManager : MonoBehaviour
     public List<Transform> playerFieldSlots;
     public List<Transform> enemyFieldSlots;
 
-    public TMP_Text goldText, xpText, levelText, hpText;
+    public TMP_Text goldText, xpText, levelText, hpText, relicGoldText, enemyHpText, bossHPText;
     public int playerGold = 0;
     public int playerXP = 0;
     public int playerLevel = 1;
-    public int playerHP = 20;
+    public int playerHP = 30;
+    public int relicGold = 0; 
+    public StageType currentStageType;
+    public int enemyHP = 20;
+    public int playerMaxHP = 30; 
+    public int bossHP = 50;
 
+    public GameObject restUI;      
+    [SerializeField] private GameObject gameClearUI;    
+    public bool isBattleOver = false;
+    public int turnCount = 1;
+    
     public float turnDuration = 30f;
     private float turnTimer;
 
@@ -29,10 +39,13 @@ public class BattleManager : MonoBehaviour
     private bool isPlayerTurn = true;
     private bool isTurnProcessing = false;
     public bool keepShop = false;
+    public bool isBossStage = false;
 
     public List<Card> playerHandCards = new();
     public List<Card> playerFieldCards = new();
     public List<Card> enemyFieldCards = new();
+    public List<UnitCardSO> enemyHandCards = new();
+
 
     private Dictionary<int, int> xpTable = new()
     {
@@ -71,12 +84,19 @@ public class BattleManager : MonoBehaviour
             yield return StartCoroutine(StartEnemyTurn());
         }
     }
+    
+    public void StartBattle()
+    {
+        StopAllCoroutines();
+        StartCoroutine(PlayerTurnLoop());
+    }
 
     IEnumerator StartPlayerTurn()
     {
         isPlayerTurn = true;
         isTurnProcessing = false;
-
+        turnCount++;
+        
         playerGold = Mathf.Min(playerGold + 1, 10);
         playerXP += 2;
         TryLevelUp();
@@ -102,8 +122,9 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator StartEnemyTurn()
     {
-        Debug.Log("적 턴 시작");
-
+        EnemyAIManager.Instance.StartTurn();
+        EnemyAIManager.Instance.DeployUnitsToField();
+        
         DeployEnemyUnits();
         yield return new WaitForSeconds(1f);
 
@@ -112,7 +133,7 @@ public class BattleManager : MonoBehaviour
 
         ResolveCombat();
         yield return new WaitForSeconds(1f);
-        ApplyPostCombatDamage();
+        ApplyPostCombatResult();
 
         Debug.Log("적 턴 종료");
     }
@@ -280,20 +301,49 @@ public class BattleManager : MonoBehaviour
         }
     }
     
-    void ApplyPostCombatDamage()
+    private void ApplyPostCombatResult()
     {
-        int damage = enemyFieldCards.Count;
-        playerHP -= damage;
-        Debug.Log($"전투 종료: 생존한 적 유닛 수 = {damage}, 플레이어 체력 {playerHP}");
+        int playerRemainingCost = 0;
+        int enemyRemainingCost = 0;
 
-        if (playerHP <= 0)
+        foreach (Card card in playerFieldCards)
+            playerRemainingCost += card.cost;
+        foreach (Card card in enemyFieldCards)
+            enemyRemainingCost += card.cost;
+
+        if (playerRemainingCost > enemyRemainingCost)
         {
-            playerHP = 0;
-            GameOver();
+            enemyHP -= playerRemainingCost;
+            if (enemyHP <= 0)
+            {
+                enemyHP = 0;
+                ClearBattlefield();
+
+                if (isBossStage)
+                {
+                    GameClear();
+                }
+                else
+                {
+                    GrantStageClearRewards();
+                }
+            }
+        }
+        else if (enemyRemainingCost > playerRemainingCost)
+        {
+            playerHP -= enemyRemainingCost;
+            if (playerHP <= 0)
+            {
+                playerHP = 0;
+                GameOver();
+            }
         }
 
         UpdateUI();
     }
+
+
+
     
     public void ApplyEventCardEffect(EventCardData card)
     {
@@ -325,6 +375,24 @@ public class BattleManager : MonoBehaviour
         UpdateUI();
     }
     
+    public void SellCard(Card card)
+    {
+        if (card == null) return;
+        if (card.isEventCard) return; 
+        
+        playerGold += 1;
+        UpdateUI();
+        if (playerFieldCards.Contains(card))
+        {
+            playerFieldCards.Remove(card);
+        }
+        
+        ShopManager.Instance.ReturnCardToStock(card.cardData); 
+        
+        Destroy(card.gameObject);
+    }
+
+    
     void SpawnRandomCardOfTier(int tier)
     {
         List<UnitCardSO> pool = ShopManager.Instance.GetCardsOfTier(tier);
@@ -342,8 +410,6 @@ public class BattleManager : MonoBehaviour
         card.effectValue = so.effectValue;
         AddCardToHand(card);
     }
-
-
 
     
     public void OnClick_ReRoll()
@@ -440,7 +506,20 @@ public class BattleManager : MonoBehaviour
             playerTurn = !playerTurn;
         }
     }
+    
+    public void ClearBattlefield()
+    {
+        foreach (var card in playerHandCards)
+            Destroy(card.gameObject);
+        foreach (var card in playerFieldCards)
+            Destroy(card.gameObject);
+        foreach (var card in enemyFieldCards)
+            Destroy(card.gameObject);
 
+        playerHandCards.Clear();
+        playerFieldCards.Clear();
+        enemyFieldCards.Clear();
+    }
 
     
     UnitCardSO GetRandomEnemyUnit()
@@ -454,14 +533,14 @@ public class BattleManager : MonoBehaviour
     {
         enemyFieldCards.Clear();
 
-        int enemyCount = Random.Range(2, 6); // 2~5 유닛
-        for (int i = 0; i < enemyCount; i++)
-        {
-            UnitCardSO so = GetRandomEnemyUnit();
-            if (so == null) continue;
+        List<UnitCardSO> finalCards = EnemyAIManager.Instance.GetFinalFieldUnits();
 
+        for (int i = 0; i < finalCards.Count && i < enemyFieldSlots.Count; i++)
+        {
+            UnitCardSO so = finalCards[i];
             GameObject obj = Instantiate(cardPrefab, enemyFieldSlots[i]);
             Card c = obj.GetComponent<Card>();
+
             c.cardName = so.cardName;
             c.cost = so.cost;
             c.attack = so.attack;
@@ -470,10 +549,60 @@ public class BattleManager : MonoBehaviour
             c.effectType = so.effectType;
             c.effectValue = so.effectValue;
             c.isPlaced = true;
+            c.cardData = so;
 
-            enemyFieldCards.Add(c);
+            enemyFieldCards.Add(c); // 이제 Card 타입으로 Add
         }
     }
+
+    
+    void GrantStageClearRewards()
+    {
+        switch (currentStageType)
+        {
+            case StageType.Normal:
+                relicGold += 1;
+                Debug.Log("Normal 몬스터 처치 → 골드 +1");
+                break;
+            case StageType.Elite:
+                relicGold += 3;
+                Debug.Log("Elite 몬스터 처치 → 골드 +3");
+                break;
+        }
+
+        UpdateUI();
+    }
+    public void HealPlayer(int amount)
+    {
+        playerHP = Mathf.Min(playerMaxHP, playerHP + amount);
+        UpdateUI();
+    }
+
+    // 유물 스테이지 진입 처리
+    public void EnterRelicRoom()
+    {
+        relicGold += 5;
+        StageManager.Instance.MoveToNextStage();
+    }
+
+    // 휴식 스테이지 진입 처리
+    public void EnterRestRoom()
+    {
+        restUI.SetActive(true);
+        StageManager.Instance.MoveToNextStage();
+    }
+    
+    
+    public void GameClear()
+    {
+        isBattleOver = true;
+        StopAllCoroutines();
+        if (gameClearUI != null)
+            gameClearUI.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+
 
 
     public bool IsHandFull() => playerHandCards.Count >= maxHandSize;
@@ -522,5 +651,8 @@ public class BattleManager : MonoBehaviour
         xpText.text = $"XP: {playerXP}";
         levelText.text = $"Lv {playerLevel}";
         hpText.text = $"HP: {playerHP}";
+        relicGoldText.text = $"Relic: {relicGold}";
+        enemyHpText.text = $"Enemy: {enemyHP}";
     }
+
 }

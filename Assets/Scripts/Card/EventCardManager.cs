@@ -20,10 +20,35 @@ public class EventCardManager : MonoBehaviour
         playerEventDeck.Add(card);
         Debug.Log($"이벤트 카드 추가됨: {card}");
     }
-
-    public EventCardData GetRandomCardFromDeck()
+    
+    public void UpgradeCard(EventCardData card)
     {
-        if (playerEventDeck.Count == 0) return null;
-        return playerEventDeck[Random.Range(0, playerEventDeck.Count)];
+        if (card == null) return;
+
+        switch (card.type)
+        {
+            case "Sword":
+            case "Shield":
+                card.value += 3;
+                break;
+            case "Star":
+                card.value *= 2;
+                break;
+            case "Book":
+                return; // 강화 불가 카드
+        }
+        
+        switch (card.type)
+        {
+            case "Sword":
+            case "Shield":
+                if (card.value > 6) card.value = 6;
+                break;
+            case "Star":
+                if (card.value > 4) card.value = 4;
+                break;
+        }
     }
+
+
 }

@@ -42,9 +42,20 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public bool isPlaced = false;
     public bool isEventCard = false;
     public EventCardData eventCardData; 
+    public UnitCardSO cardData; 
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            if (BattleManager.Instance.playerFieldCards.Contains(this))
+            {
+                BattleManager.Instance.SellCard(this);
+            }
+            return;
+        }
+        
         if (!isPlaced && BattleManager.Instance.IsPlayerTurn() && !BattleManager.Instance.IsFieldFull())
         {
             BattleManager.Instance.MoveCardToField(this);
@@ -68,4 +79,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
             BattleManager.Instance.ApplySplashDamage(this, effectValue);
         }
     }
+    
+
 }
