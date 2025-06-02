@@ -11,6 +11,7 @@ public class StageManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        FindAnyObjectByType<FadeInController>().StartFadeIn();
         GenerateStages();
     }
 

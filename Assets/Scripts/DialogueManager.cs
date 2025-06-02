@@ -1,20 +1,30 @@
+using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using DG.Tweening;  
 
 public class DialogueManager : MonoBehaviour
 {
     public GameObject textPanel;    
     public GameObject characterImage;
+    public Sprite angrySprite;
+    public RectTransform characterImageRect;
     public TextMeshProUGUI Name;
     public TextMeshProUGUI Text;
     public string[] dialogueLines;
     public float typingSpeed = 0.05f;
-
+    private Scene scene;
     private int currentLine = 0;
     private bool isTyping = false;
     private Coroutine typingCoroutine;
+
+    private void Awake()
+    {
+        scene = SceneManager.GetActiveScene();
+    }
 
     void Start()
     {
@@ -32,11 +42,11 @@ public class DialogueManager : MonoBehaviour
         {
             if (isTyping)
             {
-                SkipTyping(); // 타이핑 중이면 전체 출력
+                SkipTyping();
             }
             else
             {
-                NextLine();   // 다음 대사로 진행
+                NextLine();
             }
         }
     }
@@ -76,12 +86,42 @@ public class DialogueManager : MonoBehaviour
         if (currentLine < dialogueLines.Length - 1)
         {
             currentLine++;
+            if (currentLine == 3)
+            {
+                characterImage.GetComponent<Image>().sprite = angrySprite;
+                StartCoroutine(JumpAnimation());
+            }
+            if (currentLine == 4)
+            {
+                StartCoroutine(JumpAnimation());
+            }
             StartTyping();
         }
         else
         {
+            if (scene.name == "Library")
+            {
+                FindAnyObjectByType<FadeOutController>().StartFadeOut("StageMap");
+            }
             textPanel.SetActive(false); 
             characterImage.SetActive(false);
         }
     }
+    
+    IEnumerator JumpAnimation()
+    {
+        Vector2 originalPos = characterImageRect.anchoredPosition;
+
+        for (int i = 0; i < 3; i++)
+        {
+            yield return characterImageRect.DOAnchorPos(originalPos + new Vector2(0, 30), 0.1f)
+                .SetEase(Ease.OutQuad)
+                .WaitForCompletion();
+
+            yield return characterImageRect.DOAnchorPos(originalPos, 0.1f)
+                .SetEase(Ease.InQuad)
+                .WaitForCompletion();
+        }
+    }
+
 }
