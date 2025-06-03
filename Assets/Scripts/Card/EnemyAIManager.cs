@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyAIManager : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class EnemyAIManager : MonoBehaviour
     public int enemyLevel = 1;
     private int maxGoldPerTurn = 1;
     public bool isBoss = false;
+    public int turnCount = 1;
     
     private List<UnitCardSO> enemyHand = new();
     private List<UnitCardSO> enemyField = new();
@@ -26,8 +29,10 @@ public class EnemyAIManager : MonoBehaviour
         Instance = this;
     }
     
+
     public void StartTurn()
     {
+        turnCount++;
         enemyGold = maxGoldPerTurn;
         enemyXP += 2;
         TryLevelUp();
@@ -63,7 +68,7 @@ public class EnemyAIManager : MonoBehaviour
 
     private void TryLevelUp()
     {
-        while (enemyLevel < 10 && enemyXP >= GetXPToNextLevel())
+        while (enemyLevel < 10 && enemyXP >= GetXPToNextLevel() && turnCount > 3)
         {
             enemyXP -= GetXPToNextLevel();
             enemyLevel++;

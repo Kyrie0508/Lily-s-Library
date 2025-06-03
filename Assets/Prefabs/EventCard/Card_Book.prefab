@@ -89,11 +89,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5a894f90c63b14c8e2d1a0ac97fe4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardType: 1
-  power: 0
-  powerText: {fileID: 7308545844718717632}
-  handIndex: -1
-  currentLocation: 0
+  costText: {fileID: 0}
+  nameText: {fileID: 0}
+  atkText: {fileID: 0}
+  hpText: {fileID: 0}
+  cardImage: {fileID: 0}
+  cardName: 
+  cost: 0
+  attack: 0
+  hp: 0
+  originalHp: 0
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  isPlaced: 0
+  isEventCard: 0
+  eventCardData:
+    type: 
+    value: 0
+  cardData: {fileID: 0}
 --- !u!1 &6532209925748392199
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,8 +142,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -50, y: -40}
-  m_SizeDelta: {x: 100, y: 150}
+  m_AnchoredPosition: {x: 5.8, y: -4.1}
+  m_SizeDelta: {x: 28.3568, y: 33.3102}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5037707344897679904
 CanvasRenderer:

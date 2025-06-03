@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 8618421801174714737}
   - component: {fileID: 7282683844138386656}
   - component: {fileID: 6099272254826407912}
+  - component: {fileID: 8301131898598800902}
   m_Layer: 6
   m_Name: Card_Elaine
   m_TagString: Untagged
@@ -487,6 +488,31 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8301131898598800902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4662156972345779143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5a894f90c63b14c8e2d1a0ac97fe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardName: 
+  cost: 0
+  attack: 0
+  hp: 0
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  isPlaced: 0
+  isEventCard: 0
+  eventCardData:
+    type: 
+    value: 0
+  cardData: {fileID: 11400000, guid: 45e9d7a2e7d8a054fb26224ac84e0b12, type: 2}
 --- !u!1 &5890992882701449041
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   attack: 1
   hp: 5
   art: {fileID: 6731061402739266554, guid: 859a8e3de78df6b45983204d80ec4c9d, type: 3}
-  effectTrigger: 0
-  effectType: 0
-  effectValue: 0
-  tier: 0
+  effectTrigger: 5
+  effectType: 12
+  effectValue: 1
+  tier: 1

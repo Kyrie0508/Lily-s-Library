@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7633801775488810538}
   - component: {fileID: 5223491439170627778}
   - component: {fileID: 802169536218738513}
+  - component: {fileID: -8313833698448931355}
   m_Layer: 6
   m_Name: Card_Rose
   m_TagString: Untagged
@@ -79,6 +80,31 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-8313833698448931355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289735337382393337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5a894f90c63b14c8e2d1a0ac97fe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardName: 
+  cost: 0
+  attack: 0
+  hp: 0
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  isPlaced: 0
+  isEventCard: 0
+  eventCardData:
+    type: 
+    value: 0
+  cardData: {fileID: 11400000, guid: c3c7222cdcaf9ab44a4f55b5a95982d2, type: 2}
 --- !u!1 &5413899322074165281
 GameObject:
   m_ObjectHideFlags: 0

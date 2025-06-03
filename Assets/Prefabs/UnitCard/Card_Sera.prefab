@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 5413925136176678613}
   - component: {fileID: 6617360251719212023}
   - component: {fileID: 7564532716088116617}
+  - component: {fileID: -2772175182479692111}
   m_Layer: 6
   m_Name: Card_Sera
   m_TagString: Untagged
@@ -487,6 +488,31 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-2772175182479692111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8097950324875094498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5a894f90c63b14c8e2d1a0ac97fe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardName: 
+  cost: 0
+  attack: 0
+  hp: 0
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  isPlaced: 0
+  isEventCard: 0
+  eventCardData:
+    type: 
+    value: 0
+  cardData: {fileID: 11400000, guid: c332b5c41560fc54bbf900f262ae4dec, type: 2}
 --- !u!1 &8935754390905089444
 GameObject:
   m_ObjectHideFlags: 0

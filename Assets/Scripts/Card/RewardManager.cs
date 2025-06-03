@@ -54,5 +54,6 @@ public class RewardManager : MonoBehaviour
         EventCardManager.Instance.AddToDeck(selected);
         rewardPanel.SetActive(false);
         Debug.Log($"선택한 카드: {selected}");
+        FindAnyObjectByType<FadeOutController>().StartFadeOut("StageMap");
     }
 }

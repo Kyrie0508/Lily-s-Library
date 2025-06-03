@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 7939560093799865945}
   - component: {fileID: 4036563826013213307}
   - component: {fileID: 6619220187975585924}
+  - component: {fileID: -79485038574958388}
   m_Layer: 6
   m_Name: Card_Byakko
   m_TagString: Untagged
@@ -487,6 +488,31 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-79485038574958388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6080823551247742733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5a894f90c63b14c8e2d1a0ac97fe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardName: 
+  cost: 0
+  attack: 0
+  hp: 0
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  isPlaced: 0
+  isEventCard: 0
+  eventCardData:
+    type: 
+    value: 0
+  cardData: {fileID: 11400000, guid: 188fbe2f717e3b84d83c836b71c915f3, type: 2}
 --- !u!1 &7614384998117251880
 GameObject:
   m_ObjectHideFlags: 0

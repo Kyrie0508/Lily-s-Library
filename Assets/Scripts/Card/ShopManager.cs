@@ -28,7 +28,9 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         InitializeStock();
+        RefreshShop();
     }
+    
     private void InitializeStock()
     {
         allCardStocks.Clear();
@@ -76,20 +78,15 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < shopSlots.Length; i++)
         {
-            UnitCardSO selectedCardSO = GetRandomCardBasedOnLevel();
+            var selectedCardSO = GetRandomCardBasedOnLevel();
             if (selectedCardSO == null) continue;
 
             GameObject cardObj = Instantiate(cardPrefab, shopSlots[i]);
-            Card card = cardObj.GetComponent<Card>();
-            card.cardName = selectedCardSO.cardName;
-            card.cost = selectedCardSO.cost;
-            card.attack = selectedCardSO.attack;
-            card.hp = selectedCardSO.hp;
-            card.effectTrigger = selectedCardSO.effectTrigger;
-            card.effectType = selectedCardSO.effectType;
-            card.effectValue = selectedCardSO.effectValue;
-            CardInShop cardShop = cardObj.AddComponent<CardInShop>();
-            cardShop.cardData = selectedCardSO;
+
+            var card = cardObj.GetComponent<Card>();
+            card.SetCardData(selectedCardSO);
+            var shopInfo = cardObj.AddComponent<CardInShop>();
+            shopInfo.cardData = selectedCardSO;
         }
     }
 
@@ -111,7 +108,7 @@ public class ShopManager : MonoBehaviour
             }
         }
         var candidates = allCardStocks
-            .FindAll(cs => cs.card.tier == chosenTier && cs.remaining > 0);
+            .FindAll(cs => cs.card.cost == chosenTier && cs.remaining > 0);
 
         if (candidates.Count == 0) return null;
 
@@ -160,12 +157,16 @@ public class ShopManager : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && BattleManager.Instance.IsPlayerTurn())
         {
             if (shopUI != null)
             {
                 shopUI.SetActive(!shopUI.activeSelf);
             }
+        }
+        if (!BattleManager.Instance.IsPlayerTurn())
+        {
+            shopUI.SetActive(false);
         }
     }
 
