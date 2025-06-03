@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: 5696234589234851955
     second: RestIcon_0
+  - first:
+      213: 7681839203998707494
+    second: RestIcon_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -105,10 +108,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1024
-        height: 1024
+        width: 421
+        height: 641
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -121,11 +124,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: RestIcon_1
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 189
+        width: 374
+        height: 452
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62f23005e006b9a60800000000000000
+      internalID: 7681839203998707494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RestIcon_0: 5696234589234851955
+      RestIcon_1: 7681839203998707494
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

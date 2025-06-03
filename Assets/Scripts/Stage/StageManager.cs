@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class StageManager : MonoBehaviour
 {
@@ -7,12 +9,19 @@ public class StageManager : MonoBehaviour
 
     public List<StageData> stages = new();
     public int currentStageIndex = 0; 
+    [SerializeField] private Transform stageNodesParent;
+    [SerializeField] private Sprite normalSprite, eliteSprite, relicSprite, restSprite, bossSprite;
 
     void Awake()
     {
         Instance = this;
         FindAnyObjectByType<FadeInController>().StartFadeIn();
         GenerateStages();
+    }
+
+    private void Start()
+    {
+        DrawStageMap();
     }
 
     void GenerateStages()
@@ -37,6 +46,20 @@ public class StageManager : MonoBehaviour
         if (rand < 0.65f) return StageType.Elite;
         if (rand < 0.85f) return StageType.Relic;
         return StageType.Rest;
+    }
+    
+    public void DrawStageMap()
+    {
+        for (int i = 0; i < stages.Count; i++)
+        {
+            int reverseIndex = stages.Count - 1 - i;
+            Transform slot = stageNodesParent.GetChild(reverseIndex);
+
+            StageNodeUI ui = slot.GetComponent<StageNodeUI>();
+            if (ui != null)
+                ui.Setup(stages[i], normalSprite, eliteSprite, relicSprite, restSprite, bossSprite);
+        }
+
     }
     
     public void EnterStage(StageData stageData)
