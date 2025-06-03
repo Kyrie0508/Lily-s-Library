@@ -20,7 +20,7 @@ public class RestManager : MonoBehaviour
     {
         BattleManager.Instance.HealPlayer(8);
         restUIManager.CloseAll();
-        StageManager.Instance.MoveToNextStage();
+        FindAnyObjectByType<FadeOutController>().StartFadeOut("StageMap");
     }
 
     public void UpgradeSelectedCard(EventCardData card)
@@ -38,6 +38,6 @@ public class RestManager : MonoBehaviour
 
         EventCardManager.Instance.UpgradeCard(card);
         restUIManager.CloseAll();
-        StageManager.Instance.MoveToNextStage();
+        FindAnyObjectByType<FadeOutController>().StartFadeOut("StageMap");
     }
 }

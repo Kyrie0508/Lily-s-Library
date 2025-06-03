@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ShopManager : MonoBehaviour
 {
     public static ShopManager Instance { get; private set; }
-    
+    [SerializeField] private Transform[] shopSlots;
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private List<ShopCardStock> allCardStocks;
+    [SerializeField] public List<UnitCardSO> allCards;
+    [SerializeField] private GameObject shopUI;
 
     void Awake()
     {
+        shopUI.SetActive(false);
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
@@ -17,13 +24,38 @@ public class ShopManager : MonoBehaviour
             Instance = this;
         }
     }
-    
-    [SerializeField] private Transform[] shopSlots; // 상점 슬롯 5개
-    [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private List<ShopCardStock> allCardStocks;
-    [SerializeField] public List<UnitCardSO> allCards;
 
+    private void Start()
+    {
+        InitializeStock();
+    }
+    private void InitializeStock()
+    {
+        allCardStocks.Clear();
 
+        // 코스트별 최대 재고량
+        Dictionary<int, int> stockLimit = new()
+        {
+            { 1, 22 },
+            { 2, 20 },
+            { 3, 17 },
+            { 4, 10 },
+            { 5, 9 }
+        };
+
+        foreach (var card in allCards)
+        {
+            if (!stockLimit.ContainsKey(card.cost)) continue;
+
+            ShopCardStock stock = new ShopCardStock
+            {
+                card = card,
+                remaining = stockLimit[card.cost]
+            };
+
+            allCardStocks.Add(stock);
+        }
+    }
     public Dictionary<int, float[]> tierChances = new()
     {
         { 1, new float[] { 1f, 0f, 0f, 0f, 0f } },
@@ -78,7 +110,6 @@ public class ShopManager : MonoBehaviour
                 break;
             }
         }
-
         var candidates = allCardStocks
             .FindAll(cs => cs.card.tier == chosenTier && cs.remaining > 0);
 
@@ -123,6 +154,17 @@ public class ShopManager : MonoBehaviour
             {
                 stock.remaining++;
                 break;
+            }
+        }
+    }
+    
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (shopUI != null)
+            {
+                shopUI.SetActive(!shopUI.activeSelf);
             }
         }
     }

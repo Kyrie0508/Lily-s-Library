@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Card_Shellguard
   m_EditorClassIdentifier: 
   cardName: "\uAD6C\uBD80\uAE30"
-  fullImage: {fileID: 3074170006041047563, guid: 26938ea267af60b4e82000689154b84e, type: 3}
   cost: 3
   attack: 2
   hp: 5
+  art: {fileID: 3074170006041047563, guid: 26938ea267af60b4e82000689154b84e, type: 3}
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  tier: 0

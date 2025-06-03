@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Card_Shiro
   m_EditorClassIdentifier: 
   cardName: "\uD638\uC57C"
-  fullImage: {fileID: -421491165892713145, guid: 0fa66673d01a6114aab756453923b737, type: 3}
   cost: 1
   attack: 2
   hp: 1
+  art: {fileID: -421491165892713145, guid: 0fa66673d01a6114aab756453923b737, type: 3}
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  tier: 0

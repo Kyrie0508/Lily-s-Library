@@ -24,9 +24,7 @@ public class BattleManager : MonoBehaviour
     public int enemyHP = 20;
     public int playerMaxHP = 30; 
     public int bossHP = 50;
-
-    public GameObject restUI;      
-    [SerializeField] private GameObject gameClearUI;    
+    
     public bool isBattleOver = false;
     public int turnCount = 1;
     
@@ -57,10 +55,19 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
-        InitializeEventDeck();
-        StartCoroutine(PlayerTurnLoop());
+        if (StageManager.currentStageIndex == 1)
+        {
+            InitializeEventDeck();
+        }
+        playerHP = PlayerData.playerHP;
+        relicGold = PlayerData.relicGold;
+        StartBattle();
     }
-    
+    private void OnDisable()
+    {
+        PlayerData.playerHP = playerHP;
+        PlayerData.relicGold = relicGold; 
+    }
     void InitializeEventDeck()
     {
         eventCardDeck.Clear();
@@ -128,7 +135,7 @@ public class BattleManager : MonoBehaviour
         DeployEnemyUnits();
         yield return new WaitForSeconds(1f);
 
-        ApplyBattleStartEffects(); // 이미 있다면 유지
+        ApplyBattleStartEffects();
         yield return new WaitForSeconds(1f);
 
         ResolveCombat();
@@ -321,7 +328,7 @@ public class BattleManager : MonoBehaviour
 
                 if (isBossStage)
                 {
-                    GameClear();
+                    FindAnyObjectByType<FadeOutController>().StartFadeOut("Ending");
                 }
                 else
                 {
@@ -356,7 +363,6 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case "Shield":
-                // 방어도 시스템 없으므로 임시로 HP 회복
                 playerHP += card.value;
                 Debug.Log($"Shield 이벤트: 플레이어 체력 +{card.value}");
                 break;
@@ -577,30 +583,7 @@ public class BattleManager : MonoBehaviour
         playerHP = Mathf.Min(playerMaxHP, playerHP + amount);
         UpdateUI();
     }
-
-    // 유물 스테이지 진입 처리
-    public void EnterRelicRoom()
-    {
-        relicGold += 5;
-        StageManager.Instance.MoveToNextStage();
-    }
-
-    // 휴식 스테이지 진입 처리
-    public void EnterRestRoom()
-    {
-        restUI.SetActive(true);
-        StageManager.Instance.MoveToNextStage();
-    }
     
-    
-    public void GameClear()
-    {
-        isBattleOver = true;
-        StopAllCoroutines();
-        if (gameClearUI != null)
-            gameClearUI.SetActive(true);
-        Time.timeScale = 0f;
-    }
 
 
 
@@ -647,12 +630,16 @@ public class BattleManager : MonoBehaviour
     
     public void UpdateUI()
     {
-        goldText.text = $"Gold: {playerGold}";
-        xpText.text = $"XP: {playerXP}";
-        levelText.text = $"Lv {playerLevel}";
-        hpText.text = $"HP: {playerHP}";
+        int requiredXp = xpTable.ContainsKey(playerLevel) ? xpTable[playerLevel] : 0;
+        goldText.text = $"x {playerGold}";
+        if (xpTable.ContainsKey(playerLevel))
+            xpText.text = $"XP: {playerXP} / {xpTable[playerLevel]}";
+        else
+            xpText.text = $"XP: {playerXP} / MAX";
+        levelText.text = $"현재 LV. {playerLevel}";
+        hpText.text = $"{playerHP}";
         relicGoldText.text = $"Relic: {relicGold}";
-        enemyHpText.text = $"Enemy: {enemyHP}";
+        enemyHpText.text = $"{enemyHP}";
     }
 
 }

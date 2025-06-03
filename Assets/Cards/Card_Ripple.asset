@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Card_Ripple
   m_EditorClassIdentifier: 
   cardName: "\uB07C\uC695\uC774"
-  fullImage: {fileID: -1693485935312475804, guid: 27203bed75fe48b42b4e88d662292814, type: 3}
   cost: 3
   attack: 2
   hp: 2
+  art: {fileID: -1693485935312475804, guid: 27203bed75fe48b42b4e88d662292814, type: 3}
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  tier: 0

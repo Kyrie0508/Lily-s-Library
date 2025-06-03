@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Card_Elaine
   m_EditorClassIdentifier: 
   cardName: "\uC5D8\uB808\uC778"
-  fullImage: {fileID: -5544569061267607521, guid: 00455db40f04b9a47b1c070c3f52f1fc, type: 3}
   cost: 2
   attack: 1
   hp: 3
+  art: {fileID: -5544569061267607521, guid: 00455db40f04b9a47b1c070c3f52f1fc, type: 3}
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  tier: 0

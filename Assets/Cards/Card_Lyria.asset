@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Card_Lyria
   m_EditorClassIdentifier: 
   cardName: "\uAF43\uBCF4\uB77C"
-  fullImage: {fileID: 6960851837818565662, guid: 0fb509985b69f8140bd6d3117cc8473f, type: 3}
   cost: 5
   attack: 6
   hp: 6
+  art: {fileID: 6960851837818565662, guid: 0fb509985b69f8140bd6d3117cc8473f, type: 3}
+  effectTrigger: 0
+  effectType: 0
+  effectValue: 0
+  tier: 0
